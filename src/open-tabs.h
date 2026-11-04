@@ -232,6 +232,12 @@ static void RevealSelection() {
     revealPending = false;
 }
 
+static void CancelPendingActivation() {
+    pending = nullptr;
+    pendingFrames = 0;
+    if (restoreSidebarRoot) restoreSidebarFrames = 1;
+}
+
 static void Activate(const winrt::weak_ref<mux::FrameworkElement>& target) {
     // Close the popover first. A later tick revalidates the live target before acting.
     pending = target;

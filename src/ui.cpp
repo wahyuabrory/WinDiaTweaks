@@ -3121,6 +3121,9 @@ static LRESULT CALLBACK ArcKeyHook(int code, WPARAM wp, LPARAM lp) {
         if (Engine_TweakOn(L"floatingNewTab") && DiaIsForeground()) {
             bool ctrl = GetAsyncKeyState(VK_CONTROL) & 0x8000, alt = GetAsyncKeyState(VK_MENU) & 0x8000,
                  shift = GetAsyncKeyState(VK_SHIFT) & 0x8000;
+            // A newer address/new-tab command supersedes the deferred tab switch.
+            if (ctrl && !alt && !shift && (k->vkCode == 'L' || k->vkCode == 'T'))
+                open_tabs::CancelPendingActivation();
             if (t_newTabMode && FocusedQueryBox()) {
                 try {
                     if (!ctrl && !alt && !shift && (k->vkCode == VK_UP || k->vkCode == VK_DOWN) &&
